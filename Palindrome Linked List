@@ -1,0 +1,26 @@
+Given the head of a singly linked list, return true if it is a palindrome.
+
+ Example 1:
+
+Input: head = [1,2,2,1]
+Output: true
+
+Solution 
+
+    private ListNode fPointer;
+
+    private boolean pCheck(ListNode currentNode) {
+        if (currentNode != null) {
+            if (!recursivelyCheck(currentNode.next)) return false;
+            if (currentNode.val != fPointer.val) return false;
+            fPointer = fPointer.next;
+        }
+        return true;
+    }
+
+    public boolean isPalindrome(ListNode head) {
+        fPointer = head;
+        return pCheck(head);
+    }
+    
+    Time Complexity : O(n)
