@@ -4,7 +4,7 @@ An integer is a palindrome when it reads the same backward as forward.
 
 For example, 121 is a palindrome while 123 is not.
 
-public class Solution {
+public class Palindrome {
     public bool IsPalindrome(int x) {
  if(x < 0 || (x % 10 == 0 && x != 0)) {
             return false;
