@@ -1,0 +1,62 @@
+Given a rod of length n  and array prices of length n denoting the cost of pieces of the rod of length 1 to n, find the maximum amount that can be made if the rod is cut up optimally.
+Lets understand with an example:
+
+length   | 1   2   3   4   5   6   7   8  
+--------------------------------------------
+price    | 1   5   8   9  10  17  17  20
+Given a rod of length of n (here n=8) and its prices if it is sold in that many piece.
+That is:
+
+ If we sell 1 piece its price will be 1
+ if we sell 2 piece its price will be 5
+ Similarly:
+	
+	Pieces       Cost
+	---------------------
+	 3 piece =    8 
+	 4 piece =    9
+	 5 piece =   10
+	 6 piece =   17
+	 7 piece =   17
+	 8 piece =   20
+Now we have to find the way to cut the rod in pieces such that the profit obtained when sold becomes maximum.
+
+
+Approach 1 :
+
+public static int maximumProfit(int[] prices, int n) {
+   if (n == 0) {
+     return 0;
+   }
+   int maxProfit = Integer.MIN_VALUE;
+   for (int i = 1; i <= n; i++) {
+     maxProfit = Math.max(maxProfit, prices[i - 1] + maximumProfit(prices, n - i));
+   }
+   return maxProfit;
+ }
+ 
+ Approach 2:Memoization Based Approach
+ 
+ Understanding : Rather than using redundant function calls, we can calculate the value of the function call once, and memoize it to use for future operations.
+ 
+ public static int maximumProfit(int[] prices, int n, int[] dp) {
+  if (n == 0) {
+    return 0;
+  }
+  if (dp[n] != -1) {
+    return dp[n];
+  }
+  int maxProfit = Integer.MIN_VALUE;
+  for (int i = 1; i <= n; i++) {
+    maxProfit = Math.max(maxProfit, prices[i - 1] + maximumProfit(prices, n - i, dp));
+  }
+  return dp[n] = maxProfit;
+}
+public static int getMaxProfit(int[] a, int n) {
+  int[] dp = new int[n + 1];
+  for (int i = 0; i <= n; i++) {
+    dp[i] = -1;
+  }
+  return maximumProfit(a, n, dp);
+}
+ 
