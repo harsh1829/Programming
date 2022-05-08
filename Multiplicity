@@ -1,0 +1,53 @@
+Sort the array. For each i, set T = target - A[i], the remaining target. We can try using a two-pointer technique to find A[j] + A[k] == T. This approach is the natural continuation of trying to make the two-pointer technique we know from previous problems, work on this problem.
+
+Because some elements are duplicated, we have to be careful. In a typical case, the target is say, 8, and we have a remaining array (A[i+1:]) of [2,2,2,2,3,3,4,4,4,5,5,5,6,6]. We can analyze this situation with cases.
+
+Whenever A[j] + A[k] == T, we should count the multiplicity of A[j] and A[k]. In this example, if A[j] == 2 and A[k] == 6, the multiplicities are 4 and 2, and the total number of pairs is 4 * 2 = 8. We then move to the remaining window A[j:k+1] of [3,3,4,4,4,5,5,5].
+
+As a special case, if A[j] == A[k], then our manner of counting would be incorrect. If for example the remaining window is [4,4,4], there are only 3 such pairs. In general, when A[j] == A[k], we have \binom{M}{2} = \frac{M*(M-1)}{2}( 2M​)= 2M∗(M−1)​pairs (j,k) (with j < k) that satisfy A[j] + A[k] == T, where MM is the multiplicity of A[j] (in this case M=3M=3).
+
+
+class Multiplicity {
+    public int threeSumMulti(int[] A, int target) {
+        int MOD = 1_000_000_007;
+        long ans = 0;
+        Arrays.sort(A);
+
+        for (int i = 0; i < A.length; ++i) {
+            
+            int T = target - A[i];
+            int j = i+1, k = A.length - 1;
+
+            while (j < k) {
+               
+                if (A[j] + A[k] < T)
+                    j++;
+                else if (A[j] + A[k] > T)
+                    k--;
+                else if (A[j] != A[k]) {  // We have A[j] + A[k] == T.
+                  
+                    int left = 1, right = 1;
+                    while (j+1 < k && A[j] == A[j+1]) {
+                        left++;
+                        j++;
+                    }
+                    while (k-1 > j && A[k] == A[k-1]) {
+                        right++;
+                        k--;
+                    }
+
+                    ans += left * right;
+                    ans %= MOD;
+                    j++;
+                    k--;
+                } else {
+                    ans += (k-j+1) * (k-j) / 2;
+                    ans %= MOD;
+                    break;
+                }
+            }
+        }
+
+        return (int) ans;
+    }
+}
